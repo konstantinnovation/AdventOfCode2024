@@ -1,39 +1,33 @@
+day="4"
+#rawdata = open("input"+day).readlines();
+rawdata = open("input"+day+"test").readlines();
 
-day="3"
-rawdata = open("input"+day).readlines();
-#rawdata = open("input"+day+"test").readlines();
-do = True
-total = 0
-for data in rawdata:
-    index = data.find("mul(")
-    while( index >=0):
-        doIndex = data.find("do()")
-        dontIndex = data.find("don't()")
-        print("do",doIndex,"dont",dontIndex)
-        if( doIndex >=0 and doIndex < index  ):
-            print("Do it!")
-            do = True
-        if( dontIndex >=0 and dontIndex < index ):
-            print("Dont do it!")
-            do = False
+for line in rawdata:
+    print(line.strip())
 
-        data = data[index+4:]
-        #print(data)
-        parenindex = data.find(")")
-        index = data.find("mul(")
-        if parenindex > 0  and parenindex < index or index < 0 :
-            nums = data[:parenindex]
-            #print(nums)
-            if("," in nums):
-                pair = nums.split(",")
-                if(len(pair[0])<4 and len(pair[1])<4):
-                    print("nums:",pair, len(pair[0]) , len(pair[1]))
-                    if do:
-                        total+= int(pair[0]) * int(pair[1])
-        else:
-            print("rejecting:",data[:parenindex] )
-
-print(total)
-
-#print("...")
-#print(data[-3:])
+def check(grid,row,col,drow,dcol):
+    print("found X at",row,col)
+    word = "XMAS"
+    for i in range(1,4):
+        rowi = row+i*drow
+        coli = col+i*dcol
+        try:
+            if grid[rowi][coli] != word[i] :
+                print(word[i],"not found, instead: ", grid[rowi][coli] )
+                return 0
+        except:
+            return 0
+    return 1
+count = 0;
+for row in range(len(rawdata)):
+    for col in range(len(rawdata[row])):
+        if rawdata[row][col] == 'X':
+            count += check(rawdata,row,col,0,1);
+            count += check(rawdata,row,col,0,-1);
+            count += check(rawdata,row,col,1,0);
+            count += check(rawdata,row,col,-1,0);
+            count += check(rawdata,row,col,1,1);
+            count += check(rawdata,row,col,1,-1);
+            count += check(rawdata,row,col,-1,-1);
+            count += check(rawdata,row,col,-1,1);
+print(count)
