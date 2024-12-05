@@ -1,19 +1,23 @@
 day="4"
-#rawdata = open("input"+day).readlines();
-rawdata = open("input"+day+"test").read().split("\n");
+rawdata = open("input"+day).read().split("\n");
+#rawdata = open("input"+day+"test").read().split("\n");
 
 for line in rawdata:
     print(line.strip())
 
 
 def checkX(grid,row,col):
-    print("found A at",row,col)
-    if     grid[row -1 ][col -1] == 'M' and grid[row +1 ][col +1]=='S'     or grid[row -1 ][col -1] == 'S' and grid[row +1 ][col +1]=='A':
-        print("found diagonal 1")
-        if grid[row -1 ][col +1] == 'M' and grid[row +1 ][col -1]=='S' or grid[row -1 ][col +1] == 'S' and grid[row +1 ][col -1]=='A':
-            print("found diagonal 2")
+    #print("found A at",row,col)
+    if     grid[row -1 ][col -1] == 'M' and grid[row +1 ][col +1]=='S'     or grid[row -1 ][col -1] == 'S' and grid[row +1 ][col +1]=='M':
+        #print("found diagonal 1")
+        #print("checking:",grid[row -1 ][col + 1],grid[row + 1 ][col -1])
+        if     grid[row -1 ][col + 1] == 'M' and grid[row + 1 ][col -1] == 'S':
+            #print("found diagonal 2a")
             return 1
-    print("Failed to find and X of Mas")
+        if grid[row -1 ][col +1] == 'S' and grid[row +1 ][col -1]=='M':
+            #print("found diagonal 2b")
+            return 1
+    #print("Failed to find and X of Mas")
     return 0
 
 
@@ -50,10 +54,11 @@ for row in range(1,len(rawdata)-1):
             count += check(rawdata,row,col,-1,-1);
             count += check(rawdata,row,col,-1,1);
 print(count)
-
+if(rawdata[-1]==""):
+    rawdata.pop(-1)
 count = 0;
-for row in range(len(rawdata)):
-    for col in range(len(rawdata[row])):
+for row in range(1,len(rawdata)-1):
+    for col in range(1,len(rawdata[row])-1):
         if rawdata[row][col] == 'A':
             count += checkX(rawdata,row,col);
 
