@@ -1,6 +1,7 @@
+import random
 day="5"
-#rawdata = open("input"+day).readlines();
-rawdata = open("input"+day+"test").read().split("\n");
+rawdata = open("input"+day).read().split("\n");
+#rawdata = open("input"+day+"test").read().split("\n");
 
 part = rawdata.index("")
 rules = rawdata[:part]
@@ -40,18 +41,46 @@ def check(num,prev,rest,d,all):
             return False
     return True
 ans = []
-#print(order)
 
+
+def checkBook(book,order,allpages):
+        for i in range(len(book)-1):
+            value = book[i]
+            rest = book[i+1:]
+            prev = book[:i]
+            if check(value,prev,rest,order,allpages):
+                return False
+        return True
+
+def reorder(book, order,allpages):
+    newbook = [book[0]]
+    for page in book[1:]:
+        inserted = False;
+        for i in range(len(newbook)):
+            if newbook[i] in order[page]:
+                newbook.insert(i,page)
+                inserted = True;
+                break;
+        if not inserted:
+            newbook.append(page)
+    return newbook
+
+print(order)
+print("----")
+total = 0
+total2 = 0
+id = 0
 for book in books:
-    print(book)
     book = book.split(",")
-    for i in range(len(book)-1):
-        value = book[i]
-        rest = book[i+1:]
-        prev = book[:i]
-        if check(value,prev,rest,order,allpages):
-            ans.append(book)
-for x in ans:
-    print(x)
-
+    print("book: ",id,"of",len(books))
+    id+=1
+    if checkBook(book,order,allpages):
+        #print("Good ",book, book[len(book)//2])
+        total += int(book[len(book)//2])
+    else:
+        #print("Badd ",book)
+        book = reorder(book,order,allpages)
+        total2 += int(book[len(book)//2])
+print(total)
+print(total2)
 #phase 2
